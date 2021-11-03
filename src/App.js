@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
 
-function App() {
+import "./App.css";
+import { MissingDeps } from "./demos/MissingDeps";
+import { NotUsingHooks } from "./demos/NotUsingHooks";
+import { NotUsingLintRules } from "./demos/NotUsingLintRules";
+import { NotUsingUseCallback } from "./demos/NotUsingUseCallback";
+import { OverusingUseCallback } from "./demos/OverusingUseCallback";
+import { OverusingUseState } from "./demos/OverusingUseState";
+import { UsingOutdatedState } from "./demos/UsingOutdatedState";
+
+export function App() {
+  const [current, setCurrent] = useState();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="App">
+      <h1>Click a button to toggle showing that demo.</h1>
+      <ol>
+        {[
+          ["Not Using Hooks", NotUsingHooks],
+          ["Overusing useState", OverusingUseState],
+          ["Missing Deps", MissingDeps],
+          ["Not Using Lint Rules", NotUsingLintRules],
+          ["Not Using useCallback", NotUsingUseCallback],
+          ["Overusing useCallback", OverusingUseCallback],
+          ["Using Outdated State", UsingOutdatedState],
+        ].map(([text, demo]) => (
+          <li key={text}>
+            <button
+              onClick={() =>
+                setCurrent(current?.text === text ? undefined : [text, demo])
+              }
+              type="button"
+            >
+              {text}
+            </button>
+          </li>
+        ))}
+      </ol>
+      <hr />
+      {current
+        ? (() => {
+            const [text, Component] = current;
+            return (
+              <>
+                <h2>{text}</h2>
+                <Component />
+              </>
+            );
+          })()
+        : null}
+    </main>
   );
 }
-
-export default App;
